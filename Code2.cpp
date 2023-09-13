@@ -27,7 +27,11 @@ string GeneratePattern(string str) {
                 i = j;
             }
 
-            pattern += "[A-Za-z]{" + to_string(repeatCount) + "}";
+            if (repeatCount == 1) {
+                pattern += "[A-Za-z]";
+            } else {
+                pattern += "[A-Za-z]{" + to_string(repeatCount) + "}";
+            }
         }
 
         i++;
@@ -51,8 +55,10 @@ string StringChallenge(string str) {
 
 int main(void) {
     // Example inputs
-    cout << StringChallenge("+++++* abcdehhhhhh") << endl; // Output: false
-    cout << StringChallenge("$**+*{2} 9mmmrrrkbb") << endl; // Output: true
+    cout << StringChallenge("++*{5} gheeeee") << endl; // Output: true
+    cout << StringChallenge("$**+*{2} 7mmmrrrkbb") << endl; // Output: true
+    cout << StringChallenge("*{1}*{1} rt") << endl; // Output: true
+    cout << StringChallenge("* ttt") << endl; // Output: true
 
     return 0;
 }
