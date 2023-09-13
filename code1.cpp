@@ -34,6 +34,15 @@ string ArrayChallenge(string strArr[], int arrLength) {
     }
     cacheState.pop_back();  // Remove the trailing hyphen
 
+    // Convert the cacheState to uppercase
+    transform(cacheState.begin(), cacheState.end(), cacheState.begin(), ::toupper);
+
+    // Remove characters present in ChallengeToken (case insensitive)
+    string ChallengeToken = "bz93vncjw71";
+    for (char c : ChallengeToken) {
+        cacheState.erase(remove(cacheState.begin(), cacheState.end(), toupper(c)), cacheState.end());
+    }
+
     // Reverse the cacheState string to get the correct order
     reverse(cacheState.begin(), cacheState.end());
 
