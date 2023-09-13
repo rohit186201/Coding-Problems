@@ -1,52 +1,49 @@
 #include <iostream>
+#include <string>
 #include <vector>
-#include <unordered_map>
-#include <list>
+#include <algorithm>
 
-std::string ArrayChallenge(std::vector<std::string> strArr) {
-    std::list<std::string> cache;
-    std::unordered_map<std::string, std::list<std::string>::iterator> cacheMap;
-    std::vector<std::string> result;
+using namespace std;
 
-    for (const std::string& str : strArr) {
-        if (cacheMap.find(str) != cacheMap.end()) {
-            // Move the accessed item to the front of the cache
-            cache.erase(cacheMap[str]);
-            cache.push_front(str);
+string ArrayChallenge(string strArr[], int arrLength) {
+    vector<string> cache;  // Initialize a vector to represent the cache
+    const int maxCacheSize = 5;  // Maximum cache size
+
+    for (int i = 0; i < arrLength; i++) {
+        string element = strArr[i];
+        auto it = find(cache.begin(), cache.end(), element);
+        if (it != cache.end()) {
+            // If the element is already in the cache, move it to the front
+            cache.erase(it);
+            cache.insert(cache.begin(), element);
         } else {
-            // Check if the cache is at its limit, and remove the least recently used item
-            if (cache.size() >= 5) {
-                cacheMap.erase(cache.back());
+            // If the element is not in the cache, add it to the front
+            cache.insert(cache.begin(), element);
+
+            // If the cache size exceeds the maximum, remove the least recently used element
+            if (cache.size() > maxCacheSize) {
                 cache.pop_back();
             }
-            // Add the new item to the cache
-            cache.push_front(str);
-            cacheMap[str] = cache.begin();
         }
-
-        result.push_back(str);
     }
 
-    std::string output;
-    for (const std::string& str : result) {
-        if (!output.empty()) {
-            output += "-";
-        }
-        output += str;
+    // Construct the final cache state as a string
+    string cacheState = "";
+    for (const string& item : cache) {
+        cacheState += item + "-";
     }
+    cacheState.pop_back();  // Remove the trailing hyphen
 
-    return output;
+    // Reverse the cacheState string to get the correct order
+    reverse(cacheState.begin(), cacheState.end());
+
+    return cacheState;  // Return the final cache state as a string
 }
 
-int main() {
-    std::vector<std::string> input1 = {"A", "B", "C", "D", "A", "E", "D", "Z"};
-    std::cout << ArrayChallenge(input1) << std::endl;  // Output: C-A-B
-
-    std::vector<std::string> input2 = {"A", "B", "A", "C", "A", "B"};
-    std::cout << ArrayChallenge(input2) << std::endl;  // Output: E-D-Q-Z-C
-
-    std::vector<std::string> input3 = {"A", "B", "C", "D", "E", "D", "Q", "Z", "C"};
-    std::cout << ArrayChallenge(input3) << std::endl;  // Output: E-D-Q-Z-C
-
+int main(void) {
+    // Example input
+    string A[] = {"A", "B", "C", "D", "E", "D", "Q", "Z", "C"};
+    int arrLength = sizeof(A) / sizeof(*A);
+    cout << ArrayChallenge(A, arrLength) << endl;
     return 0;
 }
